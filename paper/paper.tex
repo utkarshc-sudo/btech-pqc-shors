@@ -172,6 +172,13 @@ From the valid period $r = 4$: $\gcd(7^2 - 1, 15) = \gcd(48, 15) = 3$ and $\gcd(
 
 We additionally verified with $a = 11$ (order $r = 2$), obtaining a 50.3\% success rate with factors $(3, 5)$.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{shors_histogram_N15.png}
+\caption{Measurement outcome distribution for Shor's algorithm with $N=15$, $a=7$ on the Aer simulator (4,096 shots). Purple bars indicate outcomes that yield valid factors; gray bars do not. The four sharp peaks at multiples of 64 correspond to the QFT detecting the period $r=4$.}
+\label{fig:shors_n15}
+\end{figure}
+
 \subsubsection{$N = 21$, $a = 2$}
 
 The larger circuit (15 qubits, depth 13) was executed with 4,096 shots. The expected period is $r = 6$. Since $2^{10}/6 \approx 170.67$ is not an integer, the QFT peaks are not perfectly sharp---probability leaks into neighboring states, spreading across more measurement outcomes.
@@ -221,7 +228,14 @@ IBM Condor (2023) & 1{,}121 & --- & Current best \\
 \end{tabular}
 \end{table}
 
-The gap between current hardware ($\sim$1,100 qubits) and the RSA-2048 requirement ($\sim$20 million qubits)~\cite{gidney2021} is approximately four orders of magnitude in qubit count alone. Additionally:
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{resource_extrapolation.png}
+\caption{Estimated physical qubit requirements for factoring RSA keys of increasing size (log scale). The horizontal dashed line indicates current IBM hardware ($\sim$1,100 qubits). RSA-2048 requires $\sim$20 million noisy qubits~\cite{gidney2021}, a gap of approximately four orders of magnitude.}
+\label{fig:resource_extrapolation}
+\end{figure}
+
+The gap between current hardware ($\sim$1,100 qubits) and the RSA-2048 requirement ($\sim$20 million qubits)~\cite{gidney2021} is approximately four orders of magnitude in qubit count alone (Fig.~\ref{fig:resource_extrapolation}). Additionally:
 \begin{itemize}[leftmargin=*]
     \item Gate error rates must improve from $\sim 10^{-3}$ to $\sim 10^{-6}$, or quantum error correction must compensate (adding $\sim$1,000$\times$ qubit overhead per logical qubit)
     \item Coherence times must sustain computation for hours, not the current millisecond regime
@@ -269,7 +283,14 @@ A notable result emerges: \textbf{ML-KEM-768 is significantly faster than X25519
     \item \textbf{Decapsulation}: $134.4 / 11.6 = 11.6\times$ faster
 \end{itemize}
 
-This contradicts the common assumption that post-quantum algorithms impose a computational penalty. Even ML-KEM-1024 (NIST Level 5, 256-bit security) is $4$--$13\times$ faster than X25519.
+This contradicts the common assumption that post-quantum algorithms impose a computational penalty. Even ML-KEM-1024 (NIST Level 5, 256-bit security) is $4$--$13\times$ faster than X25519. Fig.~\ref{fig:mlkem_vs_x25519} visualizes this comparison for ML-KEM-768.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{mlkem_vs_x25519.png}
+\caption{Performance comparison of ML-KEM-768 vs.\ X25519 across keygen, encapsulation, and decapsulation operations (10,000 iterations each). ML-KEM-768 is 7--18$\times$ faster across all operations.}
+\label{fig:mlkem_vs_x25519}
+\end{figure}
 
 \subsubsection{Performance Scaling}
 
@@ -305,7 +326,14 @@ ML-KEM-1024 & 1{,}568 & 3{,}168 & 1{,}568 & 32 & 3{,}136 \\
 \end{tabular}
 \end{table}
 
-ML-KEM-768 requires transmitting 2,272 bytes vs.\ X25519's 64 bytes---a $35\times$ increase. While the size difference is significant in relative terms, the absolute overhead of $\sim$\SI{2}{\kilo\byte} per key exchange is modest in context:
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{size_comparison.png}
+\caption{Key and ciphertext sizes across algorithms. ML-KEM keys and ciphertexts are 25--50$\times$ larger than X25519, but the absolute overhead ($\sim$2~KB) is modest for most applications.}
+\label{fig:size_comparison}
+\end{figure}
+
+ML-KEM-768 requires transmitting 2,272 bytes vs.\ X25519's 64 bytes---a $35\times$ increase (Fig.~\ref{fig:size_comparison}). While the size difference is significant in relative terms, the absolute overhead of $\sim$\SI{2}{\kilo\byte} per key exchange is modest in context:
 \begin{itemize}[leftmargin=*]
     \item A TLS 1.3 ClientHello adds $\sim$\SI{2}{\kilo\byte}, fitting within two TCP segments
     \item A typical HTTPS page load transfers 2--5 MB; the PQC overhead is $<0.1\%$
