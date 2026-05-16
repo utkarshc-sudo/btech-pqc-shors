@@ -1,0 +1,4 @@
+paper/paper.tex
+  05ef0777-d256-442a-8209-edb32a2f8e16:2026-05-16T21:17:35.319Z 175-180,231-236,238,286,288-293,329-334,336
+---
+{"schema_version": "authorship/3.0.0", "base_commit_sha": "HEAD~1", "prompts": {"05ef0777-d256-442a-8209-edb32a2f8e16:2026-05-16T21:17:35.319Z": {"agent_id": {"tool": "claude_code", "model": ""}, "human_author": "utkarsh.c@razorpay.com", "accepted_lines": 27, "overriden_lines": 0}}}
